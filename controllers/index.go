@@ -18,7 +18,6 @@ func (c *IndexController) Get()  {
 		beego.Info("查询出错")
 		return
 	}
-	beego.Info(article)
 	c.Data["articles"] = article
 	c.TplName = "index.html"
 }
