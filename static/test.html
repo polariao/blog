@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>开始使用layer</title>
+</head>
+<body>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script type="text/javascript" src="/static/layer/layer.js"></script>
+
+<script>
+
+
+
+    $(document).ready(function(){
+        $(".test1").click(function(){
+            layer.confirm('您确定删除吗？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                $.ajax({
+                    type : "get", //提交方式
+                    url : "",//路径
+                    success : function() {
+                        layer.msg('成功', {icon: 1});
+                    }
+                });
+
+            })
+        });
+    });
+
+</script>
+<button class="test1"  >运行上述例子</button>
+
+</body>
+</html>

@@ -5,8 +5,8 @@
     <title>后台管理页面</title>
     <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
     <link rel="stylesheet" type="text/css" href="/static/css/main.css">
-    <script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
-
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+    <script type="text/javascript" src="/static/layer/layer.js"></script>
 </head>
 <body>
 
@@ -59,7 +59,7 @@
                     <td><a href="/content?id={{.ArtId}}">查看详情</a></td>
                     <td> {{.ArtTime.Format "2006-01-02 15:04:05"}}</td>
                     <td>{{.ArtCount}}</td>
-                    <td><a href="#" class="dels">删除</a></td>
+                    <td><a href="/deletearticle?id={{.ArtId}}" class="dels">删除</a> </td>
                     <td><a href="/editarticle?id={{.ArtId}}">编辑</a></td>
                     <td>财经新闻</td>
                 </tr>
@@ -75,4 +75,20 @@
         </div>
     </div>
 </body>
+
+<script>
+   window.onload = function () {
+       $(".dels").click(function () {
+           if (!confirm("是否确认删除？")) {
+               return false
+           }
+       })
+   }
+
+</script>
+
+
+
+
+
 </html>

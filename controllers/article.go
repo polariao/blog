@@ -19,6 +19,7 @@ func (c *ArticleController) AddArticle()  {
 }
 
 func (c *ArticleController) StoreArticle()  {
+	var url  string
 	artname := c.GetString("artname")
 	artcontent := c.GetString("artcontent")
 	file, header, e := c.GetFile("artfile")
@@ -27,37 +28,40 @@ func (c *ArticleController) StoreArticle()  {
 		c.TplName = "add.html"
 		return
 	}
-	defer file.Close()
-	if e != nil {
-		c.Data["code"] = "文件上传失败！"
-		c.TplName = "add.html"
-		return
-	}
-	//1、限制格式
-	ext := path.Ext(header.Filename)   //获取后缀名
-	if ext != ".jpg" && ext != ".png" && ext != ".gif" {
-		c.Data["code"] = "文件格式不正确！"
-		c.TplName = "add.html"
-		return
-	}
-	//2、限制大小
-	if header.Size > 50000000{
-		c.Data["code"] = "文件过大！"
-		c.TplName = "add.html"
-		return
-	}
-	//3、重命名，防止同文件名，后者覆盖前者
-	unix := strconv.FormatInt(time.Now().Unix(),10) + ext
-	beego.Info(unix)
+	//判断是否上传文件
+	if file != nil {
+		defer file.Close()
+		if e != nil {
+			c.Data["code"] = "文件上传失败！"
+			c.TplName = "index.html"
+			return
+		}
+		//1、限制格式
+		ext := path.Ext(header.Filename) //获取后缀名
+		if ext != ".jpg" && ext != ".png" && ext != ".gif" {
+			c.Data["code"] = "文件格式不正确！"
+			c.TplName = "index.html"
+			return
+		}
+		//2、限制大小
+		if header.Size > 50000000 {
+			c.Data["code"] = "文件过大！"
+			c.TplName = "add.html"
+			return
+		}
+		//3、重命名，防止同文件名，后者覆盖前者
+		unix := strconv.FormatInt(time.Now().Unix(), 10) + ext
+		beego.Info(unix)
 
-	if e != nil {
-		beego.Info("上传失败",e)
-	}else{
-		//进行存储
-		c.SaveToFile("artfile","./static/img/"+unix)
+		if e != nil {
+			beego.Info("上传失败", e)
+		} else {
+			//进行存储
+			c.SaveToFile("artfile", "./static/img/"+unix)
+		}
+		//    文件上传结束
+		url = "/static/img/" + unix
 	}
-	//    文件上传结束
-	url := "/static/img/"+ unix
 	o := orm.NewOrm()
 	article := new(models.Article)
 	article.ArtName = artname
@@ -161,4 +165,17 @@ func (c * ArticleController) StoreEditArticle() {
 		}
 		c.Redirect("/index",302)
 	}
+}
+
+
+func (c *ArticleController) DeleteArticle()  {
+	id, _ := c.GetInt("id")
+	o := orm.NewOrm()
+	article := new(models.Article)
+	article.ArtId = id
+	_, err := o.Delete(article, "art_id")
+	if err != nil {
+		beego.Info("delete fail")
+	}
+	c.Redirect("/index",302)
 }
