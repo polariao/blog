@@ -17,6 +17,11 @@ func (c *LoginController) Get()  {
 func (c *LoginController) Post()  {
 	username := c.GetString("username")
 	password := c.GetString("password")
+	if username == "" ||password == ""{
+		c.Data["code"] = "数据不完整!"
+		c.TplName = "login.html"
+		return
+	}
 	o := orm.NewOrm()
 	user := new(models.User)
 	user.Name = username

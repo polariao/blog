@@ -24,7 +24,7 @@ type Article struct {
 
 func init()  {
 	//设置数据库基本信息
-	orm.RegisterDataBase("default", "mysql", "root:100521@/first?charset=utf8")
+	orm.RegisterDataBase("default", "mysql", "root:100521@/first?charset=utf8&loc=Local")
 	//注册定义的model
 	orm.RegisterModel(new(User),new(Article))
 	//生成表
